@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bloxcoin</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    #bg-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.05;
+      width: 80vw;
+      z-index: 0;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <img id="bg-logo" src="bloxcoin-logo.png" alt="Bloxcoin Logo" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+  <script>
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    let renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create coin geometry
+    let geometry = new THREE.CylinderGeometry(2, 2, 0.2, 64);
+    let material = new THREE.MeshStandardMaterial({ color: 0xffd700 });
+    let coin = new THREE.Mesh(geometry, material);
+    scene.add(coin);
+
+    // Lights
+    let light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+
+    camera.position.z = 5;
+
+    let isHovering = false;
+    
+    document.addEventListener('mousemove', () => {
+      isHovering = true;
+    });
+
+    document.addEventListener('mouseout', () => {
+      isHovering = false;
+    });
+
+    document.addEventListener('click', () => {
+      window.location.href = "https://four.meme";
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (isHovering) {
+        coin.rotation.y += 0.05;
+      } else {
+        coin.rotation.y += 0.005;
+      }
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
